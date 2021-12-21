@@ -10,7 +10,10 @@ np.random.seed(3)
 
 NUM_EPOCHS = 200
 
-
+# TODO: (1) Move all hyper-parameter setting to __init__ function.
+#       (2) Automatically normalizing data.
+#       (3) Add more functions.
+#       (4) Conduct a hyper-parameter exploration. Draw some plots. Write a technical report.
 
 
 def main():

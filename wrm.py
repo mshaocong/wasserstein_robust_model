@@ -21,8 +21,7 @@ class WassersteinRobustModel:
         self.net.to(DEVICE)
 
         self.dataset = dataset
-
-        gen_dataset =  np.random.standard_normal(size = dataset.data.shape)
+        gen_dataset =  np.random.standard_normal(size = dataset.data.shape) + np.copy(dataset.data/255.0)
         gen_dataset = np.expand_dims(gen_dataset, axis=1)
         self.gen_dataset = gen_dataset
 
@@ -38,6 +37,7 @@ class WassersteinRobustModel:
 
         data = self.dataset.data[indices]
         data = data.unsqueeze(1)
+        data = data/255.0
         data = data.float().to(DEVICE)
         target = self.dataset.targets[indices].to(DEVICE)
 
