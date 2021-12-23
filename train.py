@@ -2,7 +2,7 @@ from model.net import Net
 import torch
 import torchvision
 import numpy as np
-from wrm import WRM
+from wrm import WRM, MomentumWRM
 from utils import *
 import time
 import argparse
@@ -12,8 +12,7 @@ np.random.seed(3)
 
 NUM_EPOCHS = 100
 
-# TODO: (1) Implement the MomentumWRM
-#       (4) Conduct a hyper-parameter exploration. Draw some plots. Write a technical report.
+# TODO: (4) Conduct a hyper-parameter exploration. Draw some plots. Write a technical report.
 
 
 def main():
@@ -37,8 +36,11 @@ def main():
     lr_descent = 10e-3
     num_ascent_steps = 1
 
-    model = WRM(net, trainset[0], trainset[1], attacker_type="L2",
-                                   lr_descent=lr_descent, lr_ascent=lr_ascent)
+    # model = WRM(net, trainset[0], trainset[1], attacker_type="L2",
+    #                               lr_descent=lr_descent, lr_ascent=lr_ascent)
+    model = MomentumWRM(net, trainset[0], trainset[1], attacker_type="L2",
+                lr_descent = lr_descent, lr_ascent = lr_ascent)
+
     accuracy = []
     for i in range(NUM_EPOCHS):
         sample_indeces_list = get_indices(batch_size, len(trainset[0]))
