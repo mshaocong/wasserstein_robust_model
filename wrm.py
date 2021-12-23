@@ -2,9 +2,6 @@ from utils import *
 import torch
 import torch.nn.functional as F
 import numpy as np
-import time
-
-
 
 # Check if GPU is corrected set up
 if torch.cuda.is_available():
@@ -20,7 +17,7 @@ class WRM:
 
         self.data = data
         self.targets = labels
-        gen_data =  np.random.standard_normal(size = data.shape) + np.copy(data)
+        gen_data = np.random.standard_normal(size=data.shape) + np.copy(data)
         self.gen_data = gen_data
 
         self.gamma = gamma
@@ -68,7 +65,7 @@ class WRM:
             elif self.attacker_type == "L1":
                 loss_ascent = F.nll_loss(output, target) - self.gamma * torch.linalg.vector_norm(data - gen_data, ord=1)
             else:
-                raise "Attacker type "+str(self.attacker_type)+" is not supported."
+                raise "Attacker type " + str(self.attacker_type) + " is not supported."
             loss_ascent.backward()
             gen_data.data = gen_data.data + lr_ascent * gen_data.grad.data
             # gen_data.data = l1proximal(gen_data.data, 0.0001)
@@ -101,7 +98,6 @@ class MomentumWRM(WRM):
 
         self.cache = np.copy(self.gen_data)
 
-
     def _ascent(self, indices, num_ascent_steps):
         lr_ascent = self.lr_ascent
         net = self.net
@@ -128,7 +124,7 @@ class MomentumWRM(WRM):
             elif self.attacker_type == "L1":
                 loss_ascent = F.nll_loss(output, target) - self.gamma * torch.linalg.vector_norm(data - gen_data, ord=1)
             else:
-                raise "Attacker type "+str(self.attacker_type)+" is not supported."
+                raise "Attacker type " + str(self.attacker_type) + " is not supported."
             loss_ascent.backward()
             gen_data.data = gen_data.data + lr_ascent * gen_data.grad.data + self.momentum_ascent * (data - past_data)
             # gen_data.data = l1proximal(gen_data.data, 0.0001)
