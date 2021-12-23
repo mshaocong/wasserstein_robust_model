@@ -1,19 +1,19 @@
-# Minimal Implementation of Wasserstein Robust Model
-This repo includes the minimal implementation of the classical **Wasserstein robust model** which is proposed in [[1]](#1). It generates the adversarial attacking data to improve the robustness of training model. Given the data set `(x, y)` where `x` is the image and `y` is the label, The goal of Wasserstein robust model is to solve the following optimization problem:
+# A PyTorch Implementation of Wasserstein Robust Model
+This repo includes the minimal PyTorch implementation of the classical **Wasserstein robust model** which is proposed in [[1]](#1). It generates the adversarial attacking data to improve the robustness of training model. Given the data set `(x, y)` where `x` is the image and `y` is the label, The goal of Wasserstein robust model is to solve the following optimization problem:
 
 ![Loss](/img/goal.png)
 
-Here `z` denotes the adversarial data and `theta` denotes the parameters of deep neural network. `gamma` is used to assure the maximization problem to be strongly concave; it requires to be tuned for a different dataset. We expect the output parameter `theta` is the best model on all data similar to the original data rather than solely on the original data.  
+Here `z` denotes the adversarial images and `theta` denotes the parameters of deep neural network. `gamma` is a tuning parameter to assure the maximization problem to be strongly concave.    
 
 
 
-We notice that all existing implementations on GitHub lack of the flexibility when we need 
+This PyTorch implementation of Wasserstein robust model aims to provides the flexibility of
 
-* to customize the optimizer and the adversarial loss;
+* customizing the optimizer and the adversarial loss;
 
-* to apply more than one step gradient ascent updates to solve the maximization problem; 
+* applying more than one step gradient ascent updates to solve the maximization problem; 
 
-* to utilize the training history to boost up the speed of training.
+* utilizing the training history to boost up the speed of training.
 
   
 
@@ -22,21 +22,27 @@ We notice that all existing implementations on GitHub lack of the flexibility wh
 This repo includes the following parts:
 
 * A highly customizable PyTorch adversarial training pipeline.  
-* A repeatable experiment on MNIST dataset.
+* A tutorial example on multiple datasets.
 
 We illustrate the training pipeline as follows. 
 
 
 
-For the first step, we do one step stochastic gradient descent (or other optimization method) on the neural network parameter by minimizing the *classifier loss*.
+For the first step, we do one step stochastic gradient descent with respect to `theta` (or other optimization method) on the neural network parameter by minimizing the *classifier loss*.
 
 ![Step1](/img/step1.png)
 
 
 
-Since we have already evaluated the *classifier loss*, in the second step, it suffices to evaluate the *adversarial loss* and apply the stochastic gradient ascent. 
+For the second step, we do multiple steps stochastic gradient ascent with respect to `z` to perturb the original images. This approach is trying to maximize the classification error (adversarial attack)  under the soft constraint provided by the adversarial loss. 
 
 ![Step2](/img/step2.png)
+
+
+
+## Usage
+
+
 
 
 
