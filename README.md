@@ -55,6 +55,7 @@ python train_FashionMNIST.py
   <img src="FashionMNIST-acc.png" width="300" />  
 </p>
 
+The repeating experiments on the paper [[2]](#2) is provided in the .7z file `GDA with Momentum - MNIST.7z`.
 
 ## Citation
 To cite this repo:
