@@ -8,8 +8,6 @@ import pickle
 import argparse
 
 
-# TODO: (4) Conduct a hyper-parameter exploration. Draw some plots. Write a technical report.
-
 
 def main(args):
     torch.manual_seed(args.seed)
