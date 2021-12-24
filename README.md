@@ -14,7 +14,7 @@ This PyTorch implementation of Wasserstein robust model aims to provides the fle
 
 * applying more than one step gradient ascent updates to solve the maximization problem; 
 
-* utilizing the training history to boost up the speed of training, such as the momentum technique given in [[2]](#2). 
+* utilizing the training history to boost up the speed of training. 
 
   
 
@@ -41,19 +41,42 @@ For the second step, we do multiple steps stochastic gradient ascent with respec
    <img src="/img/step2.png"> 
 </p>
 
+ 
+
+## Experiment Results
+We present two demo examples showing the performance improvment is obtained by applying the momentum technique for both maximization and minimization stages. The supporting theory for full gradient updates is provided in [[2]](#2). To repeat the experiment, simply run
+```
+python train_MNIST.py
+python train_FashionMNIST.py
+```
+
+<p align="center">
+  <img src="MNIST-acc.png" width="300" />
+  <img src="FashionMNIST-acc.png" width="300" />  
+</p>
 
 
-## Usage
-
-
-
-
-
-## Experiment
-
-
-
-
+## Citation
+To cite this repo:
+```
+@misc{wrm,
+  title = {A PyTorch Implementation of Wasserstein Robust Model},
+  author = {Shaocong Ma},
+  year = {2021},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/mshaocong/wasserstein_robust_model}},
+}
+```
+To cite our work:
+```
+@article{chen2021accelerated,
+  title={Accelerated Proximal Alternating Gradient-Descent-Ascent for Nonconvex Minimax Machine Learning},
+  author={Chen, Ziyi and Ma, Shaocong and Zhou, Yi},
+  journal={arXiv preprint arXiv:2112.11663},
+  year={2021}
+}
+```
 
 
 
