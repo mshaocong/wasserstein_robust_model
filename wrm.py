@@ -130,3 +130,15 @@ class MomentumWRM(WRM):
             # gen_data.data = l1proximal(gen_data.data, 0.0001)
             gen_data.grad.data.zero_()
         self.gen_data[indices] = np.copy(gen_data.data.cpu())
+
+
+class NonWRM(WRM):
+    def __init__(self, net, data, labels, lr_descent=10e-3):
+        super().__init__(net, data, labels, attacker_type="L2", lr_descent=lr_descent, lr_ascent=0.0, gamma=0.0)
+        self.optim_descent = torch.optim.SGD(self.net.parameters(), lr=lr_descent)
+
+        gen_data = np.copy(data)
+        self.gen_data = gen_data
+
+    def update(self, indices, num_ascent_steps=0):
+        self._decent(indices)
