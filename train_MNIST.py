@@ -1,9 +1,9 @@
-from model.net import Net
+from wrm.model.net import Net
 import torch
 import torchvision
 import numpy as np
-from wrm import NonWRM, WRM, MomentumWRM
-from utils import *
+from wrm.wasserstein_robust_model import WRM, MomentumWRM, NonWRM
+from wrm.utils import *
 import pickle
 import argparse
 
@@ -26,33 +26,33 @@ def main(args):
                                              shuffle=False, num_workers=0)
     testset = next(iter(testloader))
 
-    # model = WRM(Net(), trainset[0], trainset[1], attacker_type=args.attacker,
-    #            lr_descent=args.lr_descent, lr_ascent=args.lr_ascent)
-    # accelerated_model = MomentumWRM(Net(), trainset[0], trainset[1], attacker_type=args.attacker,
-    #                                momentum_descent=args.momentum_descent, momentum_ascent=args.momentum_ascent,
-    #                                lr_descent=args.lr_descent, lr_ascent=args.lr_ascent)
-    non_wrm = NonWRM(Net(), trainset[0], trainset[1],  lr_descent=args.lr_descent)
+    model = WRM(Net(), trainset[0], trainset[1], attacker_type=args.attacker,
+                lr_descent=args.lr_descent, lr_ascent=args.lr_ascent)
+    accelerated_model = MomentumWRM(Net(), trainset[0], trainset[1], attacker_type=args.attacker,
+                                    momentum_descent=args.momentum_descent, momentum_ascent=args.momentum_ascent,
+                                    lr_descent=args.lr_descent, lr_ascent=args.lr_ascent)
+    # non_wrm = NonWRM(Net(), trainset[0], trainset[1],  lr_descent=args.lr_descent)
 
     model_accuracy = {"vanilla": [], "momentum": [], "non-wrm":[]}
     for i in range(args.epochs):
         sample_indeces_list = get_indices(args.batch_size, len(trainset[0]))
         for index in sample_indeces_list:
-            # model.update(index, num_ascent_steps=args.num_ascent_steps)
-            non_wrm.update(index)
+            model.update(index, num_ascent_steps=args.num_ascent_steps)
+            accelerated_model.update(index)
 
-        # num_correct, num_total = model.evaluate(testset[0], testset[1])
-        # model_accuracy["vanilla"].append(num_correct / num_total)
+        num_correct, num_total = model.evaluate(testset[0], testset[1])
+        model_accuracy["vanilla"].append(num_correct / num_total)
 
-        num_correct, num_total = non_wrm.evaluate(testset[0], testset[1])
-        model_accuracy["non-wrm"].append(num_correct / num_total)
+        num_correct, num_total = accelerated_model.evaluate(testset[0], testset[1])
+        model_accuracy["momentum"].append(num_correct / num_total)
 
     with open('accuracy_' + args.id + '.pickle', 'wb') as handle:
         pickle.dump(model_accuracy, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     print("Training completed.")
 
-    print(model_accuracy["non-wrm"][-1])
-    torch.save(non_wrm.net.state_dict(), "net98acc.weights")
+    # print(model_accuracy["non-wrm"][-1])
+    # torch.save(non_wrm.net.state_dict(), "net98acc.weights")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Wasserstein Robust Model')

@@ -1,9 +1,9 @@
-from model.net import Net
+from wrm.model.net import Net
 import torch
 import torchvision
 import numpy as np
-from wrm import WRM, MomentumWRM
-from utils import *
+from wrm.wasserstein_robust_model import WRM, MomentumWRM
+from wrm.utils import *
 import pickle
 import argparse
 

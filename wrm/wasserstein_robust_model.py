@@ -1,4 +1,4 @@
-from utils import *
+from wrm.utils import *
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -37,7 +37,7 @@ class WRM:
         gen_data.requires_grad = False
         for param in net.parameters():
             param.requires_grad = True
-        output = net(gen_data)
+        output = F.log_softmax(net(gen_data), dim=1)
         loss_descent = F.nll_loss(output, target)
         loss_descent.backward()
         optim_descent.step()
@@ -58,7 +58,7 @@ class WRM:
             if self.attacker_type is None:
                 break
 
-            output = net(gen_data)
+            output = F.log_softmax(net(gen_data), dim=1)
             if self.attacker_type == "L2":
                 # loss_ascent = F.nll_loss(output, target) - self.gamma * torch.sum((data - gen_data) ** 2)
                 loss_ascent = F.nll_loss(output, target) - self.gamma * torch.linalg.vector_norm(data - gen_data, ord=2)
@@ -84,6 +84,7 @@ class WRM:
         data = data.float().to(DEVICE)
         labels = labels.float().to(DEVICE)
         outputs = self.net(data)
+        outputs = F.log_softmax(outputs, dim=1)
         _, predicted = torch.max(outputs.data, 1)
         return (predicted == labels).sum().item(), labels.size(0)
 
@@ -117,7 +118,7 @@ class MomentumWRM(WRM):
             if self.attacker_type is None:
                 break
 
-            output = net(gen_data)
+            output = F.log_softmax(net(gen_data), dim=1)
             if self.attacker_type == "L2":
                 # loss_ascent = F.nll_loss(output, target) - self.gamma * torch.sum((data - gen_data) ** 2)
                 loss_ascent = F.nll_loss(output, target) - self.gamma * torch.linalg.vector_norm(data - gen_data, ord=2)
