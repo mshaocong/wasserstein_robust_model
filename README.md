@@ -41,7 +41,7 @@ For the second step, we do multiple steps stochastic gradient ascent with respec
    <img src="/img/step2.png"> 
 </p>
 
- 
+
 
 ## Experiment Results
 We present two demo examples showing the performance improvment is obtained by applying the momentum technique for both maximization and minimization stages. The supporting theory for full gradient updates is provided in [[2]](#2). To repeat the experiment, simply run
@@ -51,9 +51,10 @@ python train_FashionMNIST.py
 ```
 
 <p align="center">
-  <img src="MNIST-acc.png" width="300" />
-  <img src="FashionMNIST-acc.png" width="300" />  
+  <img src="/img/MNIST-acc.png" width="300" />
+  <img src="/img/FashionMNIST-acc.png" width="300" />  
 </p>
+
 
 The repeating experiments on the paper [[2]](#2) is provided in the .7z file `GDA with Momentum - MNIST.7z`.
 
