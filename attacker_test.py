@@ -36,10 +36,10 @@ def test():
     print("Predicted labels are ", predicted.tolist())
 
     # Apply Attacking
-    # attacker = attacker.AttackerL2(reg_strength = 1.0)
+    # att = attacker.AttackerL2(reg_strength = 0.01)
     att = attacker.AttackerFGSM()
-    # adv_images, loss_hist = attacker.attack(images=data, true_labels=labels, target_net=net, lr = 0.1, num_steps = 1000)
-    adv_images, loss_hist = att.attack(images=data, target_label=8, target_net=net, lr = 0.01, num_steps=10)
+    # adv_images, loss_hist = att.attack(images=data, true_labels=labels, target_net=net, lr = 0.1, num_steps = 1000)
+    adv_images, loss_hist = att.attack(images=data, target_label=8, target_net=net, lr = 0.1, num_steps=10)
 
     # Test results
     if loss_hist is not None:
